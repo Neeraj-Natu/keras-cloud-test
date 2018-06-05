@@ -29,8 +29,10 @@ text = ""
 batch_size = 100
 num_classes = 2
 epochs = 10
-
-
+maxlen = 40
+step = 3
+sentences = []
+next_chars = []
 
 def sample(preds, temperature=1.0):
     # helper function to sample an index from a probability array
@@ -98,10 +100,8 @@ def train_model (train_file='data.txt', job_dir='./tmp/keras-model', **args):
     indices_char = dict((i, c) for i, c in enumerate(chars))
 
     # cut the text in semi-redundant sequences of maxlen characters
-    maxlen = 40
-    step = 3
-    sentences = []
-    next_chars = []
+
+
     for i in range(0, len(text) - maxlen, step):
         sentences.append(text[i: i + maxlen])
         next_chars.append(text[i + maxlen])
