@@ -25,7 +25,7 @@ from tensorflow.python.lib.io import file_io
 import argparse
 tf.reset_default_graph()
 
-
+text = ""
 batch_size = 100
 num_classes = 2
 epochs = 10
