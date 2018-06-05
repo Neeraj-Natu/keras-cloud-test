@@ -87,7 +87,7 @@ def train_model (train_file='data.txt', job_dir='./tmp/keras-model', **args):
     print('Using logs_path located at {}'.format(logs_path))
     print('-----------------------')
 
-    with file_io.FileIO(uri, mode='rb') as f:
+    with file_io.FileIO(train_file, mode='r') as f:
         text = f.read().lower()
 
     print('corpus length:', len(text))
