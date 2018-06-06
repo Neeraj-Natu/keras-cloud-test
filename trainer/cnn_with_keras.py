@@ -7,6 +7,7 @@ from keras import callbacks
 import tensorflow as tf
 K.set_image_data_format('channels_last')
 import numpy as np
+import argparse
 from tensorflow.python.lib.io import file_io
 
 def model(input_shape):
@@ -57,10 +58,14 @@ def model(input_shape):
 
 
 
-def main(unused_argv):
+def main(job_dir,**args):
+
+    ##Setting up the path for saving logs
+    logs_path = job_dir + '/logs/'
 
     ##Using the GPU
     with tf.device('/device:GPU:0'):
+
         ##Loading the data
         mnist = tf.contrib.learn.datasets.load_dataset("mnist")
         train_data = mnist.train.images  # Returns np.array
@@ -83,11 +88,11 @@ def main(unused_argv):
         ## Printing the modle summary
         Model.summary()
 
-        ## Adding the callback for TensorBoard
-        tensorboard = callbacks.TensorBoard(log_dir='./Graph', histogram_freq=0, write_graph=True, write_images=True)
+        ## Adding the callback for TensorBoard and History
+        tensorboard = callbacks.TensorBoard(log_dir=logs_path, histogram_freq=0, write_graph=True, write_images=True)
 
         ##fitting the model
-        history = Model.fit(x = train_data, y = train_labels, epochs = 4,verbose = 1, batch_size=100, callbacks=[tensorboard], validation_data=(eval_data,eval_labels) )
+        Model.fit(x = train_data, y = train_labels, epochs = 4,verbose = 1, batch_size=100, callbacks=[tensorboard], validation_data=(eval_data,eval_labels) )
 
         # Save model.h5 on to google storage
         Model.save('model.h5')
@@ -95,6 +100,18 @@ def main(unused_argv):
             with file_io.FileIO(job_dir + '/model.h5', mode='w+') as output_f:
                 output_f.write(input_f.read())
 
+
 ##Running the app
 if __name__ == "__main__":
-  tf.app.run()
+    parser = argparse.ArgumentParser()
+
+    # Input Arguments
+    parser.add_argument(
+      '--job-dir',
+      help='GCS location to write checkpoints and export models',
+      required=True
+    )
+    args = parser.parse_args()
+    arguments = args.__dict__
+
+    main(**arguments)

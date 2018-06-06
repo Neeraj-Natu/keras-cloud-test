@@ -1,1 +1,1 @@
-gcloud ml-engine jobs submit training JOB7 --module-name=trainer.keras-model --package-path=./trainer --job-dir=gs://neeraj-text-bucket/keras-train_05-06-2018 --region=us-east1 --config=trainer/cloudml-gpu.yaml
+gcloud ml-engine jobs submit training JOB23 --module-name=trainer.cnn_with_keras --package-path=./trainer --job-dir=gs://neeraj-text-bucket/keras-train_06-06-2018_23_00 --region=us-east1 --config=trainer/cloudml-gpu.yaml
