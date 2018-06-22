@@ -61,7 +61,7 @@ def model(input_shape):
 def main(job_dir,**args):
 
     ##Setting up the path for saving logs
-    logs_path = job_dir + '/logs/'
+    logs_path = job_dir + 'logs/tensorboard'
 
     ##Using the GPU
     with tf.device('/device:GPU:0'):
@@ -97,7 +97,7 @@ def main(job_dir,**args):
         # Save model.h5 on to google storage
         Model.save('model.h5')
         with file_io.FileIO('model.h5', mode='r') as input_f:
-            with file_io.FileIO(job_dir + '/model.h5', mode='w+') as output_f:
+            with file_io.FileIO(job_dir + 'model/model.h5', mode='w+') as output_f:
                 output_f.write(input_f.read())
 
 
